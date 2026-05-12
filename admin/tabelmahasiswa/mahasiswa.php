@@ -151,7 +151,7 @@ function badgeStatus($kode) {
             text-decoration: none;
             font-size: 13.5px;
             font-weight: 500;
-            border-left: 3px solid transparent;
+            box-shadow: inset 3px 0 0 transparent;
             transition: all 0.2s;
         }
 
@@ -164,13 +164,13 @@ function badgeStatus($kode) {
         .sidebar-nav ul li a:hover {
             background: rgba(255,255,255,0.06);
             color: white;
-            border-left-color: rgba(255,255,255,0.3);
+            box-shadow: inset 3px 0 0 rgba(255,255,255,0.3);
         }
 
         .sidebar-nav ul li a.active {
             background: var(--primary);
             color: white;
-            border-left-color: #74c0fc;
+            box-shadow: inset 3px 0 0 #74c0fc;
         }
 
         .sidebar-footer {
@@ -245,7 +245,7 @@ function badgeStatus($kode) {
         /* ===== CONTENT ===== */
         .content { padding: 24px 28px; flex:1; }
 
-        /* ===== SEARCH BAR ===== */
+        /* ===== TOOLBAR ===== */
         .toolbar {
             display: flex; align-items:center; gap:12px;
             margin-bottom: 18px;
@@ -389,6 +389,64 @@ function badgeStatus($kode) {
         }
         .btn-delete:hover { background: var(--red); color:white; }
 
+        /* ===== PAGINATION ===== */
+        .pagination-wrap {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 14px 20px;
+            border-top: 1px solid var(--border);
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .pagination-info {
+            font-size: 12px;
+            color: var(--text-muted);
+        }
+
+        .pagination-btns {
+            display: flex;
+            gap: 5px;
+            align-items: center;
+        }
+
+        .pg-btn {
+            min-width: 34px;
+            height: 34px;
+            padding: 0 10px;
+            border: 1.5px solid var(--border);
+            background: white;
+            color: var(--text);
+            border-radius: 7px;
+            font-size: 13px;
+            font-weight: 600;
+            font-family: inherit;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 5px;
+            transition: all 0.2s;
+        }
+
+        .pg-btn:hover:not(:disabled) {
+            border-color: var(--primary);
+            color: var(--primary);
+            background: #ebf5fb;
+        }
+
+        .pg-btn.active {
+            background: var(--primary);
+            border-color: var(--primary);
+            color: white;
+        }
+
+        .pg-btn:disabled {
+            opacity: 0.4;
+            cursor: not-allowed;
+        }
+
         /* ===== FOOTER ===== */
         .page-footer {
             text-align:center; padding:16px 28px;
@@ -430,6 +488,7 @@ function badgeStatus($kode) {
             .main { margin-left:0 !important; }
             .content { padding:0 !important; }
             table { font-size:10px; }
+            table tbody tr { display:table-row !important; }
         }
     </style>
 </head>
@@ -545,13 +604,13 @@ function badgeStatus($kode) {
                         <?php
                         $no = 1;
                         while ($row = mysqli_fetch_assoc($tampil)):
-                            $jur    = namaJurusan($row['jur']);
-                            $prodi  = namaProdi($row['prodi']);
-                            $agama  = namaAgama($row['agama']);
-                            $status = namaStatus($row['status']);
+                            $jur     = namaJurusan($row['jur']);
+                            $prodi   = namaProdi($row['prodi']);
+                            $agama   = namaAgama($row['agama']);
+                            $status  = namaStatus($row['status']);
                             $stBadge = badgeStatus($row['status']);
-                            $jk = ($row['jk'] == 1) ? 'Laki-Laki' : 'Perempuan';
-                            $tgl = date('d-m-Y', strtotime($row['tgl_lahir']));
+                            $jk      = ($row['jk'] == 1) ? 'Laki-Laki' : 'Perempuan';
+                            $tgl     = date('d-m-Y', strtotime($row['tgl_lahir']));
                         ?>
                         <tr>
                             <td><input type="checkbox" class="row-chk" name="nim[]" value="<?= $row['nim'] ?>" onchange="updateSel()"></td>
@@ -624,6 +683,13 @@ function badgeStatus($kode) {
                     </tbody>
                 </table>
             </div>
+
+            <!-- PAGINATION -->
+            <div class="pagination-wrap">
+                <div class="pagination-info" id="pgInfo">Menampilkan 0–0 dari 0 data</div>
+                <div class="pagination-btns" id="pgBtns"></div>
+            </div>
+
         </div>
     </div>
 
@@ -634,48 +700,110 @@ function badgeStatus($kode) {
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js"></script>
 <script>
-    // Search & filter
+    const PER_PAGE = 5;
+    let currentPage = 1;
+    let filteredRows = [];
+
     const input  = document.getElementById('searchInput');
     const selJur = document.getElementById('filterJur');
     const selSt  = document.getElementById('filterStatus');
     const tbl    = document.getElementById('tblMahasiswa');
     const count  = document.getElementById('rowCount');
+    const pgInfo = document.getElementById('pgInfo');
+    const pgBtns = document.getElementById('pgBtns');
 
-    function filterTable() {
+    function getAllRows() {
+        return Array.from(tbl.querySelectorAll('tbody tr'));
+    }
+
+    function applyFilter() {
         const q   = input.value.toLowerCase();
         const jur = selJur.value.toLowerCase();
         const st  = selSt.value.toLowerCase();
-        const rows = tbl.querySelectorAll('tbody tr');
-        let vis = 0;
-        rows.forEach(r => {
+
+        filteredRows = getAllRows().filter(r => {
             const txt = r.innerText.toLowerCase();
-            const show = txt.includes(q)
+            return txt.includes(q)
                 && (jur === '' || txt.includes(jur))
                 && (st  === '' || txt.includes(st));
-            r.style.display = show ? '' : 'none';
-            if (show) vis++;
         });
-        count.textContent = vis + ' data';
+
+        currentPage = 1;
+        render();
     }
 
-    input.addEventListener('input', filterTable);
-    selJur.addEventListener('change', filterTable);
-    selSt.addEventListener('change', filterTable);
+    function render() {
+        const total      = filteredRows.length;
+        const totalPages = Math.max(1, Math.ceil(total / PER_PAGE));
+        currentPage      = Math.min(currentPage, totalPages);
 
-    // Init count
+        const start = (currentPage - 1) * PER_PAGE;
+        const end   = Math.min(start + PER_PAGE, total);
+
+        // Hide all rows first
+        getAllRows().forEach(r => r.style.display = 'none');
+
+        // Show only current page rows
+        filteredRows.forEach((r, i) => {
+            r.style.display = (i >= start && i < end) ? '' : 'none';
+        });
+
+        // Counter
+        count.textContent = total + ' data';
+        pgInfo.textContent = total === 0
+            ? 'Tidak ada data'
+            : `Menampilkan ${start + 1}–${end} dari ${total} data`;
+
+        // Render page buttons
+        pgBtns.innerHTML = '';
+
+        // Prev button
+        const prev = document.createElement('button');
+        prev.className = 'pg-btn';
+        prev.innerHTML = '<i class="fas fa-chevron-left"></i> Prev';
+        prev.disabled = currentPage === 1;
+        prev.onclick = () => { currentPage--; render(); };
+        pgBtns.appendChild(prev);
+
+        // Page number buttons
+        for (let p = 1; p <= totalPages; p++) {
+            const btn = document.createElement('button');
+            btn.className = 'pg-btn' + (p === currentPage ? ' active' : '');
+            btn.textContent = p;
+            btn.onclick = ((_p) => () => { currentPage = _p; render(); })(p);
+            pgBtns.appendChild(btn);
+        }
+
+        // Next button
+        const next = document.createElement('button');
+        next.className = 'pg-btn';
+        next.innerHTML = 'Next <i class="fas fa-chevron-right"></i>';
+        next.disabled = currentPage === totalPages;
+        next.onclick = () => { currentPage++; render(); };
+        pgBtns.appendChild(next);
+    }
+
+    input.addEventListener('input', applyFilter);
+    selJur.addEventListener('change', applyFilter);
+    selSt.addEventListener('change', applyFilter);
+
+    // Init
     window.addEventListener('DOMContentLoaded', () => {
-        const rows = tbl.querySelectorAll('tbody tr');
-        count.textContent = rows.length + ' data';
+        filteredRows = getAllRows();
+        render();
     });
 
-    // Checkbox all
+    // Checkbox all (hanya row yang terfilter)
     function toggleAll(src) {
-        document.querySelectorAll('.row-chk').forEach(c => c.checked = src.checked);
+        filteredRows.forEach(r => {
+            const chk = r.querySelector('.row-chk');
+            if (chk) chk.checked = src.checked;
+        });
     }
     function updateSel() {
         const all = document.querySelectorAll('.row-chk');
         const chk = document.querySelectorAll('.row-chk:checked');
-        document.getElementById('chkAll').checked = all.length === chk.length;
+        document.getElementById('chkAll').checked = all.length > 0 && all.length === chk.length;
     }
 </script>
 </body>
