@@ -37,7 +37,7 @@ $query = mysqli_query($conn, "SELECT * FROM dosen");
         .sidebar {
             width: 250px;
             height: 100vh;
-            background: #2c3e50;
+            background: #391e2f;
             color: white;
             padding: 20px;
         }
@@ -83,7 +83,7 @@ $query = mysqli_query($conn, "SELECT * FROM dosen");
         }
 
         table th {
-            background: #34495e;
+            background: #391e2f;
             color: white;
         }
     </style>
@@ -94,14 +94,14 @@ $query = mysqli_query($conn, "SELECT * FROM dosen");
 
     <div class="sidebar">
 
-        <h2>Portal UNRI</h2>
+        <h2>Portal Kampus</h2>
 
         <ul>
-            <li><a href="../dashboard.php">Dashboard</a></li>
-            <li><a href="mahasiswa.php">Mahasiswa</a></li>
-            <li><a href="dosen.php">Dosen</a></li>
-            <li><a href="matakuliah">Mata Kuliah</a></li>
-            <li><a href="../logout.php">Logout</a></li>
+           <li><a href="../dashboard.php">Dashboard</a></li>
+            <li><a href="../tabelmahasiswa/mahasiswa.php">Mahasiswa</a></li>
+            <li><a href="../tabeldosen/dosen.php">Dosen</a></li>
+            <li><a href="../tabelmatkul/matakuliah">Mata Kuliah</a></li>
+            <li><a href="../../logout.php">Logout</a></li>
         </ul>
 
     </div>
