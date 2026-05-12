@@ -79,10 +79,10 @@ if($_SESSION['role'] != 1){
         <h2>Portal UNRI</h2>
 
         <ul>
-            <li><a href="#">Dashboard</a></li>
-            <li><a href="mahasiswa.php">Mahasiswa</a></li>
-            <li><a href="#">Dosen</a></li>
-            <li><a href="#">Mata Kuliah</a></li>
+            <li><a href="dasboard.php">Dashboard</a></li>
+            <li><a href="tabelmahasiswa/mahasiswa.php">Mahasiswa</a></li>
+            <li><a href="tabeldosen/dosen.php">dosen</a></li>
+            <li><a href="tabelmatkul/matkul.php">matakuliah</a></li>
             <li><a href="#">Tukar Password</a></li>
             <li><a href="../logout.php">Logout</a></li>
         </ul>

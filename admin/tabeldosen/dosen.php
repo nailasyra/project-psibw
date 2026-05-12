@@ -1,17 +1,17 @@
 <?php
 
 session_start();
-include '../config/koneksi.php';
+include '../../config/koneksi.php';
 
 if (!isset($_SESSION['username'])) {
-    header("Location: ../login.php");
+    header("Location: ../../login.php");
 }
 
 if ($_SESSION['role'] != 1) {
-    header("Location: ../login.php");
+    header("Location: ../../login.php");
 }
 
-$query = mysqli_query($conn, "SELECT * FROM mahasiswa");
+$query = mysqli_query($conn, "SELECT * FROM dosen");
 
 ?>
 
@@ -20,7 +20,7 @@ $query = mysqli_query($conn, "SELECT * FROM mahasiswa");
 
 <head>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" rel="stylesheet">
-    <title>Data Mahasiswa</title>
+    <title>Data Dosen</title>
 
     <style>
         * {
@@ -97,7 +97,7 @@ $query = mysqli_query($conn, "SELECT * FROM mahasiswa");
         <h2>Portal UNRI</h2>
 
         <ul>
-            <li><a href="dashboard.php">Dashboard</a></li>
+            <li><a href="../dashboard.php">Dashboard</a></li>
             <li><a href="mahasiswa.php">Mahasiswa</a></li>
             <li><a href="dosen.php">Dosen</a></li>
             <li><a href="matakuliah">Mata Kuliah</a></li>
@@ -123,10 +123,9 @@ $query = mysqli_query($conn, "SELECT * FROM mahasiswa");
 
                 <tr>
                     <th>NO</th>
-                    <th>NIM</th>
+                    <th>NIDN</th>
                     <th>NAMA</th>
                     <th>JUR</th>
-                    <th>PRODI</th>
                     <th>EMAIL</th>
                     <th>AGAMA</th>
                     <th>STATUS</th>
@@ -134,16 +133,17 @@ $query = mysqli_query($conn, "SELECT * FROM mahasiswa");
                     <th>TGL. LAHIR</th>
                     <th>J. KELAMIN</th>
                     <th>ALAMAT</th>
+                    <th>PENDIDIKAN</th>
                     <th>AKSI</th>
                 </tr>
 
                 <?php
                 $no = 1;
-                $tampil = mysqli_query($conn, "SELECT * FROM mahasiswa");
+                $tampil = mysqli_query($conn, "SELECT * FROM dosen");
                 foreach ($tampil as $row) {
                     echo "<tr>";
                     echo "<td>$no</td>";
-                    echo "<td>" . $row['nim'] . "</td>";
+                    echo "<td>" . $row['nidn'] . "</td>";
                     echo "<td>" . $row['nama'] . "</td>";
                     if ($row['jur'] == 160301) {
                         echo "<td>Matematika</td>";
@@ -159,23 +159,6 @@ $query = mysqli_query($conn, "SELECT * FROM mahasiswa");
                         echo "<td>-</td>";
                     }
 
-                    if ($row['prodi'] == "160311") {
-                        echo "<td>Matematika</td>";
-                    } else if ($row['prodi'] == "160312") {
-                        echo "<td>Statistik</td>";
-                    } else if ($row['prodi'] == "160313") {
-                        echo "<td>Fisika</td>";
-                    } else if ($row['prodi'] == "160314") {
-                        echo "<td>Kimia</td>";
-                    } else if ($row['prodi'] == "160315") {
-                        echo "<td>Biologi</td>";
-                    } else if ($row['prodi'] == "160316") {
-                        echo "<td>Sistem Informasi</td>";
-                    } else if ($row['prodi'] == "160317") {
-                        echo "<td>Manajemen Informatika</td>";
-                    } else {
-                        echo "<td>-</td>";
-                    }
                     echo "<td>" . $row['email'] . "</td>";
 
                     if ($row['agama'] == "1") {
@@ -225,22 +208,23 @@ $query = mysqli_query($conn, "SELECT * FROM mahasiswa");
                     }
 
                     echo "<td>" . $row['alamat'] . "</td>";
+                    echo "<td>" . $row['pendidikan'] . "</td>";
                     ?>
 
                     <td style="text-align:center;">
                         <button type="button" class="btn btn-info btn-sm" data-bs-toggle="modal"
-                            data-bs-target="#detail<?php echo $row['nim']; ?>">
+                            data-bs-target="#detail<?php echo $row['nidn']; ?>">
 
                             Detail
 
                         </button>
-                        <a href="edit.php?nim=<?php echo $row['nim']; ?>"
+                        <a href="edit.php?nidn=<?php echo $row['nidn']; ?>"
                             style="text-decoration:none;">Edit&nbsp;|&nbsp;</a>
-                        <a href="delete.php?nim=<?php echo $row['nim']; ?>" style="text-decoration:none;"
+                        <a href="delete.php?nidn=<?php echo $row['nidn']; ?>" style="text-decoration:none;"
                             onclick="return confirm('Yakin mau hapus data ini?')"> Delete</a>
                     </td>
                     </tr>
-                    <div class="modal fade" id="detail<?php echo $row['nim']; ?>">
+                    <div class="modal fade" id="detail<?php echo $row['nidn']; ?>">
 
                         <div class="modal-dialog">
 
@@ -262,7 +246,7 @@ $query = mysqli_query($conn, "SELECT * FROM mahasiswa");
                                     <center>
 
                                        <?php
-echo "<img src='../foto/".$row['foto']."'
+echo "<img src='../foto/".$row['fotodosen']."'
 width='120'
 height='120'
 style='border-radius:50%;
@@ -277,7 +261,7 @@ margin-bottom:15px;'>";
                                     <hr>
 
                                     <p><b>NIM :</b>
-                                        <?php echo $row['nim']; ?></p>
+                                        <?php echo $row['nidn']; ?></p>
 
                                     <p><b>Email :</b>
                                         <?php echo $row['email']; ?></p>
@@ -306,31 +290,6 @@ margin-bottom:15px;'>";
                                             echo "Biologi";
                                         } else if ($row['jur'] == 160305) {
                                             echo "Ilmu Komputer";
-                                        }
-
-                                        ?>
-
-                                    </p>
-
-                                    <!-- PRODI -->
-                                    <p><b>Prodi :</b>
-
-                                        <?php
-
-                                        if ($row['prodi'] == 160311) {
-                                            echo "Matematika";
-                                        } else if ($row['prodi'] == 160312) {
-                                            echo "Statistik";
-                                        } else if ($row['prodi'] == 160313) {
-                                            echo "Fisika";
-                                        } else if ($row['prodi'] == 160314) {
-                                            echo "Kimia";
-                                        } else if ($row['prodi'] == 160315) {
-                                            echo "Biologi";
-                                        } else if ($row['prodi'] == 160316) {
-                                            echo "Sistem Informasi";
-                                        } else if ($row['prodi'] == 160317) {
-                                            echo "Manajemen Informatika";
                                         }
 
                                         ?>
