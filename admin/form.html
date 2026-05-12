@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Tambah Data</title>
+<style>
+body {
+    font-family: Arial, sans-serif;
+   
+}
+
+table {
+    width: 45%;
+    margin: 10px auto;
+    border-collapse: separate; 
+    border-spacing: 0; 
+    background-color: #fff;
+    border-radius: 10px;
+    overflow: hidden;
+    border: 3px solid #be86a1; 
+}
+
+th {
+    background-color: #d17fac; 
+    color: white;
+    padding: 3px;
+    border: 1px solid #f298c3;
+}
+
+td {
+    padding: 6px;
+	font-size: 14px;
+}
+
+tr:nth-child(even) {
+    background-color: #dfb7c2;
+}
+
+a {
+    text-decoration: none;
+    color: rgb(94, 36, 88);
+}
+
+input[type=submit], input[type=reset] {
+    padding: 8px 16px;
+    border: none;
+    border-radius: 8px;
+    font-weight: bold;
+    cursor: pointer;
+    margin: 5px;
+    transition: 0.3s;
+	color: #ffffff;
+	background-color: #ab7c96;
+}
+
+input[type=text], select {
+    width: 70%;
+    padding: 5px;
+    border: 1px solid #e393ba;
+    border-radius: 6px;
+    outline: none;
+    font-size: 14px;
+    background-color: #fff;
+    transition: 0.3s;
+	box-sizing: border-box;
+}
+
+td input, td select {
+    margin: 3px 0;
+}
+</style>
+</head>
+<body>
+	<form name="tambah" action="tambah_data.php" method="post">
+	<table>
+	<tr><td colspan="3" style="text-align:center;"><b> FORM TAMBAH DATA</b></td></tr>
+	<tr><td>NIM</td><td>:</td><td><input type=text name=nim size=8></td></tr>
+	<tr><td>NAMA</td><td>:</td><td><input type=text name=nama size=30></td></tr>
+	<tr><td>JUR</td><td>:</td><td><select name=jur>
+									<option value=160301>Matematika</option>
+									<option value=160302>Fisika</option>
+									<option value=160303>Kimia</option>
+									<option value=160304>Biologi</option>
+									<option value=160305>Ilmu Komputer</option>
+									</select>
+	</td></tr>
+	<tr><td>PRODI</td><td>:</td><td><select name=prodi>
+									<option value=160311>Matematika</option>
+									<option value=160312>Statistika</option>
+									<option value=160313>Fisika</option>
+									<option value=160314>Kimia</option>
+									<option value=160315>Biologi</option>
+									<option value=160316>Sistem Informasi</option>
+									<option value=160317>Manajemen Informatika</option>
+									</select>
+	</td></tr>
+	<tr><td>EMAIL</td><td>:</td><td><input type=text name=email size=30></td></tr>
+	<tr><td>AGAMA</td><td>:</td><td><select name=agama>
+									<option value=1>Islam</option>
+									<option value=2>Kristen</option>
+									<option value=3>Katholik</option>
+									<option value=4>Hindu</option>
+									<option value=5>Budha</option>
+									<option value=6>Konghuchu</option>
+									</select>
+	</td></tr>
+	<tr><td>STATUS</td><td>:</td><td><select name=status>
+									<option value=1>Aktif</option>
+									<option value=2>Masa Langkau</option>
+									<option value=3>Alpha Studi</option>
+									<option value=4>Semhas</option>
+									<option value=5>Kompre</option>
+									<option value=6>Alumni</option>
+									</select>
+	</td></tr>
+	<tr><td>TMP. LAHIR</td><td>:</td><td><input type=text name=tmp_lahir size=30></td></tr>
+	<tr><td>TGL. LAHIR</td><td>:</td><td><input type=text name=tgl_lahir size=8> format(yyyy-mm-dd)</td></tr>
+	<tr><td>J. KELAMIN</td><td>:</td><td><select nama=jk>
+									<option value=1>Laki-Laki</option>
+									<option value=0>Perempuan</option>
+									</select>
+	</td></tr>
+	<tr><td>ALAMAT</td><td>:</td><td><input type=text name=alamat size=30></td></tr>
+	<tr><td colspan="3" style="text-align:center;"><input type=submit name=tambah value=SIMPAN><input type=reset name=reset value=RESET></td></tr>
+	
+	
+	
