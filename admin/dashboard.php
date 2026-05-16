@@ -1,11 +1,11 @@
 <?php
 session_start();
 include "../config/koneksi.php";
-if(!isset($_SESSION['username'])){
+if (!isset($_SESSION['username'])) {
     header("Location: ../login.php");
 }
 
-if($_SESSION['role'] != 1){
+if ($_SESSION['role'] != 1) {
     header("Location: ../login.php");
 }
 
@@ -24,33 +24,35 @@ $total_matakuliah = $data['total'];
 
 // MAHASISWA TERBARU
 $mahasiswa_terbaru = [];
-$q = mysqli_query($conn, "SELECT nim, nama FROM mahasiswa ORDER BY nim DESC LIMIT 4");
-while($row = mysqli_fetch_assoc($q)){
+$q = mysqli_query($conn, "SELECT nim, nama FROM mahasiswa ORDER BY nim ASC LIMIT 4");
+while ($row = mysqli_fetch_assoc($q)) {
     $mahasiswa_terbaru[] = $row;
 }
 
 // DOSEN TERBARU
 $dosen_terbaru = [];
-$q = mysqli_query($conn, "SELECT nidn, nama FROM dosen ORDER BY nidn DESC LIMIT 4");
-while($row = mysqli_fetch_assoc($q)){
+$q = mysqli_query($conn, "SELECT nidn, nama FROM dosen ORDER BY nidn ASC LIMIT 4");
+while ($row = mysqli_fetch_assoc($q)) {
     $dosen_terbaru[] = $row;
 }
 
 // MATKUL TERBARU
 $matakuliah_terbaru = [];
-$q = mysqli_query($conn, "SELECT kode_mk, nama_mk FROM matakuliah ORDER BY kode_mk DESC LIMIT 4");
-while($row = mysqli_fetch_assoc($q)){
+$q = mysqli_query($conn, "SELECT kode_mk, nama_mk FROM matakuliah ORDER BY kode_mk ASC LIMIT 4");
+while ($row = mysqli_fetch_assoc($q)) {
     $matakuliah_terbaru[] = $row;
 }
 ?>
 
 <!DOCTYPE html>
 <html lang="id">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dashboard Admin - SIAKAD</title>
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap"
+        rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 
     <style>
@@ -69,8 +71,8 @@ while($row = mysqli_fetch_assoc($q)){
             --text: #2d3748;
             --text-muted: #718096;
             --border: #e2e8f0;
-            --shadow: 0 2px 12px rgba(0,0,0,0.08);
-            --shadow-md: 0 4px 20px rgba(0,0,0,0.12);
+            --shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
+            --shadow-md: 0 4px 20px rgba(0, 0, 0, 0.12);
             --radius: 10px;
         }
 
@@ -106,7 +108,7 @@ while($row = mysqli_fetch_assoc($q)){
 
         .sidebar-brand {
             padding: 24px 20px 20px;
-            border-bottom: 1px solid rgba(255,255,255,0.08);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
         }
 
         .sidebar-brand .brand-logo {
@@ -134,7 +136,7 @@ while($row = mysqli_fetch_assoc($q)){
 
         .brand-text span {
             font-size: 10px;
-            color: rgba(255,255,255,0.5);
+            color: rgba(255, 255, 255, 0.5);
             letter-spacing: 0.5px;
         }
 
@@ -147,7 +149,7 @@ while($row = mysqli_fetch_assoc($q)){
             font-size: 10px;
             font-weight: 600;
             letter-spacing: 1.2px;
-            color: rgba(255,255,255,0.35);
+            color: rgba(255, 255, 255, 0.35);
             padding: 8px 20px 4px;
             text-transform: uppercase;
         }
@@ -161,7 +163,7 @@ while($row = mysqli_fetch_assoc($q)){
             align-items: center;
             gap: 12px;
             padding: 11px 20px;
-            color: rgba(255,255,255,0.75);
+            color: rgba(255, 255, 255, 0.75);
             text-decoration: none;
             font-size: 13.5px;
             font-weight: 500;
@@ -176,9 +178,9 @@ while($row = mysqli_fetch_assoc($q)){
         }
 
         .sidebar-nav ul li a:hover {
-            background: rgba(255,255,255,0.06);
+            background: rgba(255, 255, 255, 0.06);
             color: white;
-            border-left-color: rgba(255,255,255,0.3);
+            border-left-color: rgba(255, 255, 255, 0.3);
         }
 
         .sidebar-nav ul li a.active {
@@ -189,20 +191,22 @@ while($row = mysqli_fetch_assoc($q)){
 
         .sidebar-footer {
             padding: 16px 20px;
-            border-top: 1px solid rgba(255,255,255,0.08);
+            border-top: 1px solid rgba(255, 255, 255, 0.08);
         }
 
         .sidebar-footer a {
             display: flex;
             align-items: center;
             gap: 10px;
-            color: rgba(255,255,255,0.6);
+            color: rgba(255, 255, 255, 0.6);
             text-decoration: none;
             font-size: 13px;
             transition: color 0.2s;
         }
 
-        .sidebar-footer a:hover { color: var(--red); }
+        .sidebar-footer a:hover {
+            color: var(--red);
+        }
 
         /* ===== MAIN ===== */
         .main {
@@ -261,7 +265,10 @@ while($row = mysqli_fetch_assoc($q)){
             transition: background 0.2s, transform 0.1s;
         }
 
-        .btn-generate:hover { background: #219a52; transform: translateY(-1px); }
+        .btn-generate:hover {
+            background: #219a52;
+            transform: translateY(-1px);
+        }
 
         .btn-logout {
             background: var(--red);
@@ -280,7 +287,9 @@ while($row = mysqli_fetch_assoc($q)){
             transition: background 0.2s;
         }
 
-        .btn-logout:hover { background: #c0392b; }
+        .btn-logout:hover {
+            background: #c0392b;
+        }
 
         /* ===== CONTENT ===== */
         .content {
@@ -313,9 +322,17 @@ while($row = mysqli_fetch_assoc($q)){
             box-shadow: var(--shadow-md);
         }
 
-        .stat-card.blue  { border-top-color: var(--primary); }
-        .stat-card.green { border-top-color: var(--green); }
-        .stat-card.orange{ border-top-color: var(--orange); }
+        .stat-card.blue {
+            border-top-color: var(--primary);
+        }
+
+        .stat-card.green {
+            border-top-color: var(--green);
+        }
+
+        .stat-card.orange {
+            border-top-color: var(--orange);
+        }
 
         .stat-icon {
             width: 52px;
@@ -328,9 +345,20 @@ while($row = mysqli_fetch_assoc($q)){
             flex-shrink: 0;
         }
 
-        .stat-card.blue  .stat-icon { background: #ebf5fb; color: var(--primary); }
-        .stat-card.green .stat-icon { background: #eafaf1; color: var(--green); }
-        .stat-card.orange .stat-icon { background: #fef9e7; color: var(--orange); }
+        .stat-card.blue .stat-icon {
+            background: #ebf5fb;
+            color: var(--primary);
+        }
+
+        .stat-card.green .stat-icon {
+            background: #eafaf1;
+            color: var(--green);
+        }
+
+        .stat-card.orange .stat-icon {
+            background: #fef9e7;
+            color: var(--orange);
+        }
 
         .stat-info h4 {
             font-size: 13px;
@@ -376,9 +404,17 @@ while($row = mysqli_fetch_assoc($q)){
             gap: 8px;
         }
 
-        .table-header.blue   { background: var(--primary); }
-        .table-header.green  { background: var(--green); }
-        .table-header.yellow { background: var(--yellow); }
+        .table-header.blue {
+            background: var(--primary);
+        }
+
+        .table-header.green {
+            background: var(--green);
+        }
+
+        .table-header.yellow {
+            background: var(--yellow);
+        }
 
         .table-card table {
             width: 100%;
@@ -429,10 +465,22 @@ while($row = mysqli_fetch_assoc($q)){
             transition: opacity 0.2s, transform 0.1s;
         }
 
-        .btn-lihat:hover { opacity: 0.85; transform: translateY(-1px); }
-        .btn-lihat.blue   { background: var(--primary); }
-        .btn-lihat.green  { background: var(--green); }
-        .btn-lihat.yellow { background: var(--yellow); }
+        .btn-lihat:hover {
+            opacity: 0.85;
+            transform: translateY(-1px);
+        }
+
+        .btn-lihat.blue {
+            background: var(--primary);
+        }
+
+        .btn-lihat.green {
+            background: var(--green);
+        }
+
+        .btn-lihat.yellow {
+            background: var(--yellow);
+        }
 
         .badge-nim {
             background: #ebf5fb;
@@ -454,179 +502,181 @@ while($row = mysqli_fetch_assoc($q)){
         }
     </style>
 </head>
+
 <body>
 
-<!-- SIDEBAR -->
-<div class="sidebar">
-    <div class="sidebar-brand">
-        <div class="brand-logo">
-            <div class="brand-icon"><i class="fas fa-graduation-cap"></i></div>
-            <div class="brand-text">
-                <h2>PORTAL</h2>
-                <span>PSIBW Akademik</span>
+    <!-- SIDEBAR -->
+    <div class="sidebar">
+        <div class="sidebar-brand">
+            <div class="brand-logo">
+                <div class="brand-icon"><i class="fas fa-graduation-cap"></i></div>
+                <div class="brand-text">
+                    <h2>PORTAL</h2>
+                    <span>PSIBW Akademik</span>
+                </div>
             </div>
+        </div>
+
+        <nav class="sidebar-nav">
+            <div class="nav-label">Menu Utama</div>
+            <ul>
+                <li><a href="#" class="active"><i class="fas fa-tachometer-alt"></i> Dashboard</a></li>
+                <li><a href="tabelmahasiswa/mahasiswa.php"><i class="fas fa-user-graduate"></i> Data Mahasiswa</a></li>
+                <li><a href="tabeldosen/dosen.php"><i class="fas fa-chalkboard-teacher"></i> Data Dosen</a></li>
+                <li><a href="tabelmatkul/matakuliah"><i class="fas fa-book"></i> Data Mata Kuliah</a></li>
+            </ul>
+            <div class="nav-label" style="margin-top:10px;">Pengaturan</div>
+            <ul>
+                <li><a href="#"><i class="fas fa-cog"></i> Pengaturan Akun</a></li>
+                <li><a href="#"><i class="fas fa-key"></i> Ganti Password</a></li>
+            </ul>
+        </nav>
+
+        <div class="sidebar-footer">
+            <a href="../logout.php"><i class="fas fa-sign-out-alt"></i> Logout</a>
         </div>
     </div>
 
-    <nav class="sidebar-nav">
-        <div class="nav-label">Menu Utama</div>
-        <ul>
-            <li><a href="#" class="active"><i class="fas fa-tachometer-alt"></i> Dashboard</a></li>
-            <li><a href="tabelmahasiswa/mahasiswa.php"><i class="fas fa-user-graduate"></i> Data Mahasiswa</a></li>
-            <li><a href="tabeldosen/dosen.php"><i class="fas fa-chalkboard-teacher"></i> Data Dosen</a></li>
-            <li><a href="tabelmatkul/matakuliah"><i class="fas fa-book"></i> Data Mata Kuliah</a></li>
-        </ul>
-        <div class="nav-label" style="margin-top:10px;">Pengaturan</div>
-        <ul>
-            <li><a href="#"><i class="fas fa-cog"></i> Pengaturan Akun</a></li>
-            <li><a href="#"><i class="fas fa-key"></i> Ganti Password</a></li>
-        </ul>
-    </nav>
+    <!-- MAIN -->
+    <div class="main">
 
-    <div class="sidebar-footer">
-        <a href="../logout.php"><i class="fas fa-sign-out-alt"></i> Logout</a>
-    </div>
-</div>
-
-<!-- MAIN -->
-<div class="main">
-
-    <!-- TOPBAR -->
-    <div class="topbar">
-        <div class="topbar-left">
-            <h3>Dashboard Admin</h3>
-            <p>Sistem Informasi Akademik &mdash; Universitas Riau</p>
-        </div>
-        <div class="topbar-right">
-            <button class="btn-generate" onclick="window.print()">
-                <i class="fas fa-file-export"></i> Generate Chart
-            </button>
-            <a href="../logout.php" class="btn-logout">
-                <i class="fas fa-sign-out-alt"></i> Logout
-            </a>
-        </div>
-    </div>
-
-    <!-- CONTENT -->
-    <div class="content">
-
-        <!-- STAT CARDS -->
-        <div class="stats-grid">
-            <div class="stat-card blue">
-                <div class="stat-icon"><i class="fas fa-user-graduate"></i></div>
-                <div class="stat-info">
-                    <h4>Total Mahasiswa</h4>
-                    <div class="stat-number"><?= $total_mahasiswa ?></div>
-                    <p>data terdaftar pada sistem</p>
-                </div>
+        <!-- TOPBAR -->
+        <div class="topbar">
+            <div class="topbar-left">
+                <h3>Dashboard Admin</h3>
+                <p>Sistem Informasi Akademik &mdash; Universitas Riau</p>
             </div>
-            <div class="stat-card green">
-                <div class="stat-icon"><i class="fas fa-chalkboard-teacher"></i></div>
-                <div class="stat-info">
-                    <h4>Total Dosen</h4>
-                    <div class="stat-number"><?= $total_dosen ?></div>
-                    <p>data terdaftar pada sistem</p>
-                </div>
-            </div>
-            <div class="stat-card orange">
-                <div class="stat-icon"><i class="fas fa-book-open"></i></div>
-                <div class="stat-info">
-                    <h4>Total Mata Kuliah</h4>
-                    <div class="stat-number"><?= $total_matakuliah ?></div>
-                    <p>data terdaftar pada sistem</p>
-                </div>
+            <div class="topbar-right">
+                <button class="btn-generate" onclick="window.print()">
+                    <i class="fas fa-file-export"></i> Generate Chart
+                </button>
+                <a href="../logout.php" class="btn-logout">
+                    <i class="fas fa-sign-out-alt"></i> Logout
+                </a>
             </div>
         </div>
 
-        <!-- TABLES -->
-        <div class="tables-grid">
+        <!-- CONTENT -->
+        <div class="content">
 
-            <!-- Mahasiswa Terbaru -->
-            <div class="table-card">
-                <div class="table-header blue">
-                    <i class="fas fa-user-graduate"></i> Mahasiswa Terbaru
+            <!-- STAT CARDS -->
+            <div class="stats-grid">
+                <div class="stat-card blue">
+                    <div class="stat-icon"><i class="fas fa-user-graduate"></i></div>
+                    <div class="stat-info">
+                        <h4>Total Mahasiswa</h4>
+                        <div class="stat-number"><?= $total_mahasiswa ?></div>
+                        <p>data terdaftar pada sistem</p>
+                    </div>
                 </div>
-                <table>
-                    <thead>
-                        <tr>
-                            <th>NIM</th>
-                            <th>Nama</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <?php foreach($mahasiswa_terbaru as $m): ?>
-                        <tr>
-                            <td><span class="badge-nim"><?= $m['nim'] ?></span></td>
-                            <td><?= $m['nama'] ?></td>
-                        </tr>
-                        <?php endforeach; ?>
-                    </tbody>
-                </table>
-                <div class="table-footer">
-                    <a href="tabelmahasiswa/mahasiswa.php" class="btn-lihat blue">Lihat Semua</a>
+                <div class="stat-card green">
+                    <div class="stat-icon"><i class="fas fa-chalkboard-teacher"></i></div>
+                    <div class="stat-info">
+                        <h4>Total Dosen</h4>
+                        <div class="stat-number"><?= $total_dosen ?></div>
+                        <p>data terdaftar pada sistem</p>
+                    </div>
+                </div>
+                <div class="stat-card orange">
+                    <div class="stat-icon"><i class="fas fa-book-open"></i></div>
+                    <div class="stat-info">
+                        <h4>Total Mata Kuliah</h4>
+                        <div class="stat-number"><?= $total_matakuliah ?></div>
+                        <p>data terdaftar pada sistem</p>
+                    </div>
                 </div>
             </div>
 
-            <!-- Dosen Terbaru -->
-            <div class="table-card">
-                <div class="table-header green">
-                    <i class="fas fa-chalkboard-teacher"></i> Dosen Terbaru
-                </div>
-                <table>
-                    <thead>
-                        <tr>
-                            <th>Nidn</th>
-                            <th>Nama</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <?php foreach($dosen_terbaru as $d): ?>
-                        <tr>
-                            <td><span class="badge-nim"><?= $d['nidn'] ?></span></td>
-                            <td><?= $d['nama'] ?></td>
-                        </tr>
-                        <?php endforeach; ?>
-                    </tbody>
-                </table>
-                <div class="table-footer">
-                    <a href="tabeldosen/dosen.php" class="btn-lihat green">Lihat Semua</a>
-                </div>
-            </div>
+            <!-- TABLES -->
+            <div class="tables-grid">
 
-            <!-- Mata Kuliah Terbaru -->
-            <div class="table-card">
-                <div class="table-header yellow">
-                    <i class="fas fa-book"></i> Mata Kuliah Terbaru
+                <!-- Mahasiswa Terbaru -->
+                <div class="table-card">
+                    <div class="table-header blue">
+                        <i class="fas fa-user-graduate"></i> Mahasiswa Terbaru
+                    </div>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>NIM</th>
+                                <th>Nama</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <?php foreach ($mahasiswa_terbaru as $m): ?>
+                                <tr>
+                                    <td><span class="badge-nim"><?= htmlspecialchars($m['nim']) ?></span></td>
+                                    <td><?= htmlspecialchars($m['nama']) ?></td>
+                                </tr>
+                            <?php endforeach; ?>
+                        </tbody>
+                    </table>
+                    <div class="table-footer">
+                        <a href="tabelmahasiswa/mahasiswa.php" class="btn-lihat blue">Lihat Semua</a>
+                    </div>
                 </div>
-                <table>
-                    <thead>
-                        <tr>
-                            <th>Kode_Matkul</th>
-                            <th>Nama</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <?php foreach($matakuliah_terbaru as $mk): ?>
-                        <tr>
-                            <td><span class="badge-nim"><?= $mk['kode_mk'] ?></span></td>
-                            <td><?= $mk['nama_mk'] ?></td>
-                        </tr>
-                        <?php endforeach; ?>
-                    </tbody>
-                </table>
-                <div class="table-footer">
-                    <a href="matakuliah.php" class="btn-lihat yellow">Lihat Semua</a>
-                </div>
-            </div>
 
+                <!-- Dosen Terbaru -->
+                <div class="table-card">
+                    <div class="table-header green">
+                        <i class="fas fa-chalkboard-teacher"></i> Dosen Terbaru
+                    </div>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Nidn</th>
+                                <th>Nama</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <?php foreach ($dosen_terbaru as $d): ?>
+                                <tr>
+                                    <td><span class="badge-nim"><?= $d['nidn'] ?></span></td>
+                                    <td><?= $d['nama'] ?></td>
+                                </tr>
+                            <?php endforeach; ?>
+                        </tbody>
+                    </table>
+                    <div class="table-footer">
+                        <a href="tabeldosen/dosen.php" class="btn-lihat green">Lihat Semua</a>
+                    </div>
+                </div>
+
+                <!-- Mata Kuliah Terbaru -->
+                <div class="table-card">
+                    <div class="table-header yellow">
+                        <i class="fas fa-book"></i> Mata Kuliah Terbaru
+                    </div>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Kode_Matkul</th>
+                                <th>Nama</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <?php foreach ($matakuliah_terbaru as $mk): ?>
+                                <tr>
+                                    <td><span class="badge-nim"><?= $mk['kode_mk'] ?></span></td>
+                                    <td><?= $mk['nama_mk'] ?></td>
+                                </tr>
+                            <?php endforeach; ?>
+                        </tbody>
+                    </table>
+                    <div class="table-footer">
+                        <a href="matakuliah.php" class="btn-lihat yellow">Lihat Semua</a>
+                    </div>
+                </div>
+
+            </div>
+        </div><!-- /content -->
+
+        <div class="page-footer">
+            &copy; 2025 Sistem Informasi Akademik — Universitas Riau
         </div>
-    </div><!-- /content -->
 
-    <div class="page-footer">
-        &copy; 2025 Sistem Informasi Akademik — Universitas Riau
-    </div>
-
-</div><!-- /main -->
+    </div><!-- /main -->
 
 </body>
+
 </html>
